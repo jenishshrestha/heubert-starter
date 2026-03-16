@@ -1,11 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env"],
-  "globalEnv": ["NODE_ENV"],
+  "globalEnv": ["NODE_ENV", "VITE_API_URL", "VITE_ENABLE_AI", "VITE_ENABLE_ANALYTICS"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**"]
     },
     "dev": {
       "cache": false,
@@ -14,11 +13,9 @@
     "type-check": {
       "dependsOn": ["^type-check"]
     },
-    "lint": {
-      "dependsOn": ["^lint"]
-    },
+    "lint": {},
     "test": {
-      "cache": false
+      "dependsOn": ["^build"]
     },
     "test:e2e": {
       "cache": false
@@ -26,6 +23,10 @@
     "storybook": {
       "cache": false,
       "persistent": true
+    },
+    "build-storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
     },
     "clean": {
       "cache": false

@@ -10,15 +10,15 @@ export const config = {
   },
   features: {
     ai: {
-      enabled: true,
+      enabled: import.meta.env.VITE_ENABLE_AI === "true",
     },
     analytics: {
-      enabled: false,
+      enabled: import.meta.env.VITE_ENABLE_ANALYTICS === "true",
     },
   },
   theme: {
     defaultTheme: "light" as const,
-    enabledThemes: ["light", "dark"] as const,
+    enabledThemes: ["light", "dark", "system"] as const,
   },
 } as const;
 

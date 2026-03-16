@@ -1,10 +1,15 @@
+import tailwindcss from "@tailwindcss/vite";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [TanStackRouterVite(), react()],
+  plugins: [TanStackRouterVite(), react(), tailwindcss()],
+  server: {
+    port: 5173,
+    strictPort: true,
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -16,11 +21,5 @@ export default defineConfig({
       "@routes": path.resolve(__dirname, "./src/routes"),
       "@assets": path.resolve(__dirname, "./src/assets"),
     },
-  },
-  test: {
-    globals: true,
-    environment: "jsdom",
-    setupFiles: "./src/test/setup.ts",
-    css: true,
   },
 });
