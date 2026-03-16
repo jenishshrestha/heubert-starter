@@ -1,0 +1,17 @@
+{
+  "name": "@heubert/types",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@heubert/tsconfig": "workspace:*",
+    "typescript": "^5.9.3"
+  }
+}

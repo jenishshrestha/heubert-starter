@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "organization": "Engineering",
+  "date": "March 2026",
+  "abstract": "Architectural standards for organizing React + Vite applications using Feature-Driven Design (FDD). Ensures code locality, encapsulation, and modular scalability. Framework-agnostic patterns adapted for modern React development.",
+  "references": [
+    "https://feature-sliced.design/docs/get-started/tutorial",
+    "https://vitejs.dev/guide/",
+    "https://tanstack.com/router/latest",
+    "https://react.dev/learn/thinking-in-react"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "heubert-starter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The React + AI Stack for 2026 - Feature-driven CRM monorepo",
+  "scripts": {
+    "dev": "turbo dev --concurrency 15",
+    "build": "turbo build",
+    "type-check": "turbo type-check",
+    "lint": "biome lint .",
+    "format": "biome format . --write",
+    "check": "biome check",
+    "test": "turbo test",
+    "test:e2e": "turbo test:e2e",
+    "storybook": "turbo storybook",
+    "clean": "turbo clean",
+    "prepare": "husky",
+    "setup-skills": "bash scripts/setup-skills.sh",
+    "postinstall": "bash scripts/setup-skills.sh"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.7",
+    "husky": "^9.1.7",
+    "turbo": "^2.8.17",
+    "typescript": "^5.9.3"
+  }
+}
