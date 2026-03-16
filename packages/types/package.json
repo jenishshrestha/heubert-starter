@@ -11,7 +11,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@heubert/tsconfig": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "typescript": "^5.9.3"
   }
 }

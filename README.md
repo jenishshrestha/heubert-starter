@@ -54,29 +54,32 @@ Heubert Starter is a production-ready monorepo template that combines the best m
 ```
 heubert-starter/
 ├── apps/
-│   └── crm/                    # React Vite CRM application
-│       ├── src/
-│       │   ├── features/       # Feature modules (Feature-Driven Design)
-│       │   │   ├── home/
-│       │   │   └── auth/
-│       │   ├── components/     # Shared components
-│       │   ├── lib/           # Utilities and configurations
-│       │   │   ├── api/       # API client setup
-│       │   │   └── query/     # React Query setup
-│       │   ├── hooks/         # Custom hooks
-│       │   ├── stores/        # Zustand stores
-│       │   └── routes/        # TanStack Router routes
-│       ├── e2e/               # Playwright tests
-│       └── .storybook/        # Storybook configuration
+│   ├── crm/                    # Main CRM web application (React + Vite)
+│   │   ├── src/
+│   │   │   ├── features/       # Feature modules (Feature-Driven Design)
+│   │   │   │   ├── home/
+│   │   │   │   └── auth/
+│   │   │   ├── components/     # Shared components
+│   │   │   ├── lib/           # Utilities and configurations
+│   │   │   │   ├── api/       # API client setup
+│   │   │   │   └── query/     # React Query setup
+│   │   │   ├── hooks/         # Custom hooks
+│   │   │   ├── stores/        # Zustand stores
+│   │   │   └── routes/        # TanStack Router routes
+│   │   └── e2e/               # Playwright E2E tests
+│   ├── crm-mobile/            # Mobile application (planned)
+│   ├── crm-website/           # Marketing website (planned)
+│   └── storybook/             # Storybook workspace
+│       └── stories/           # Component stories (46+ components)
 ├── packages/
-│   ├── ui/                    # Shared UI components (shadcn/ui)
+│   ├── design-system/         # Shared UI components (shadcn/ui based)
 │   ├── types/                 # Shared TypeScript types
 │   ├── config/                # Shared configuration
-│   └── utils/                 # Shared utilities
+│   ├── utils/                 # Shared utilities
+│   └── typescript-config/     # Shared TypeScript configurations
 └── tooling/
-    ├── typescript/            # TypeScript configurations
-    ├── tailwind/              # Tailwind configuration
-    └── biome/                 # Biome configuration
+    ├── biome/                 # Biome linting configuration
+    └── tailwind/              # Tailwind CSS configuration
 ```
 
 ## 🚀 Getting Started
@@ -117,22 +120,25 @@ The app will be available at `http://localhost:5173`
 - `pnpm dev` - Start all apps in development mode
 - `pnpm build` - Build all apps for production
 - `pnpm type-check` - Type check all packages
-- `pnpm lint` - Lint all packages
-- `pnpm format` - Format all code
+- `pnpm lint` - Lint all packages with Biome
+- `pnpm format` - Format all code with Biome
 - `pnpm test` - Run all tests
 - `pnpm test:e2e` - Run E2E tests
-- `pnpm storybook` - Start Storybook
+- `pnpm storybook` - Start Storybook (port 6006)
 - `pnpm clean` - Clean all build artifacts
 
 ### CRM App (apps/crm)
-- `pnpm dev` - Start development server
+- `pnpm dev` - Start development server (port 5173)
 - `pnpm build` - Build for production
 - `pnpm preview` - Preview production build
-- `pnpm test` - Run unit tests
-- `pnpm test:ui` - Run tests with UI
-- `pnpm test:e2e` - Run E2E tests
-- `pnpm test:e2e:ui` - Run E2E tests with UI
-- `pnpm storybook` - Start Storybook
+- `pnpm test` - Run unit tests with Vitest
+- `pnpm test:ui` - Run tests with Vitest UI
+- `pnpm test:e2e` - Run E2E tests with Playwright
+- `pnpm test:e2e:ui` - Run E2E tests with Playwright UI
+
+### Storybook App (apps/storybook)
+- `pnpm storybook` - Start Storybook development server
+- `pnpm build` - Build Storybook for production
 
 ## 🏗️ Feature-Driven Architecture
 
@@ -185,16 +191,23 @@ src/features/
 
 ## 🎨 Working with UI Components
 
-This project uses shadcn/ui components from the `@heubert/ui` package:
+This project uses shadcn/ui components from the `@repo/design-system` package:
 
 ```tsx
-import { Button, Card, Input } from "@heubert/ui";
+import { Button } from "@repo/design-system/components/ui/button";
+import { Card, CardHeader, CardContent } from "@repo/design-system/components/ui/card";
+import { Input } from "@repo/design-system/components/ui/input";
 
 function MyComponent() {
   return (
     <Card>
-      <Input placeholder="Enter text" />
-      <Button>Submit</Button>
+      <CardHeader>
+        <h2>My Form</h2>
+      </CardHeader>
+      <CardContent>
+        <Input placeholder="Enter text" />
+        <Button>Submit</Button>
+      </CardContent>
     </Card>
   );
 }
@@ -274,18 +287,30 @@ Start Storybook for component development:
 pnpm storybook
 ```
 
+This project includes **46+ pre-built component stories** from the design system, including:
+
+- **Layout**: Accordion, Breadcrumb, Card, Carousel, Collapsible, Resizable, Separator, Sidebar, Tabs
+- **Forms**: Button, Checkbox, Input, Input OTP, Label, Radio Group, Select, Slider, Switch, Textarea, Toggle, Toggle Group
+- **Data Display**: Avatar, Badge, Calendar, Chart, Progress, Skeleton, Table
+- **Overlays**: Alert Dialog, Context Menu, Dialog, Drawer, Dropdown Menu, Hover Card, Menubar, Navigation Menu, Popover, Sheet, Tooltip
+- **Feedback**: Alert, Sonner (Toast)
+- **Utilities**: Aspect Ratio, Command, Form, Pagination, Scroll Area
+
+### Creating New Stories
+
 Create stories in `*.stories.tsx` files:
 ```tsx
 import type { Meta, StoryObj } from "@storybook/react";
 import { MyComponent } from "./MyComponent";
 
-const meta = {
+const meta: Meta<typeof MyComponent> = {
   title: "Features/MyComponent",
   component: MyComponent,
+  tags: ["autodocs"],
 } satisfies Meta<typeof MyComponent>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof MyComponent>;
 
 export const Default: Story = {
   args: {
@@ -294,19 +319,21 @@ export const Default: Story = {
 };
 ```
 
+All component stories are located in [apps/storybook/stories/](apps/storybook/stories/).
+
 ## 🔧 Configuration
 
 ### TypeScript
-TypeScript configurations are shared via `@heubert/tsconfig`:
+TypeScript configurations are shared via `@repo/typescript-config`:
 - `base.json` - Base configuration
-- `react.json` - React-specific
-- `vite.json` - Vite apps
+- `react-library.json` - React libraries
+- `nextjs.json` - Next.js apps
 
 ### Tailwind CSS
-Tailwind configuration is shared via `@heubert/tailwind-config`
+Tailwind configuration is centralized in the `tooling/tailwind` package and extended by individual apps.
 
 ### Biome
-Linting and formatting rules are in `biome.json`
+Linting and formatting rules are configured in `tooling/biome/biome.json` and applied across all packages.
 
 ## 🤝 Contributing
 
@@ -330,7 +357,27 @@ Built with amazing open-source tools:
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Vercel AI SDK](https://sdk.vercel.ai/)
 
+## 🎯 What Makes This Different?
+
+### Feature-Driven Architecture
+Unlike traditional layer-based architectures, this starter follows a **feature-driven approach** where all related code lives together. This makes it easier to:
+- Find and modify features without jumping between folders
+- Delete features by removing a single directory
+- Scale your application without folder chaos
+- Onboard new developers faster
+
+### Pre-configured Storybook
+Get started immediately with **46+ production-ready component stories** covering the entire shadcn/ui component library. No need to write basic stories yourself.
+
+### Type-Safe Everything
+From routing (TanStack Router) to forms (React Hook Form + Zod) to API calls, everything is fully typed with TypeScript.
+
+### Monorepo Ready
+Built with Turborepo and pnpm workspaces, making it easy to:
+- Share code between multiple apps
+- Add new apps (mobile, marketing site, etc.)
+- Maintain consistent tooling across projects
+
 ---
 
 **Happy coding! 🚀**
-# heubert-starter
