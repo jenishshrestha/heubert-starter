@@ -1,6 +1,6 @@
 export function RadixLogo() {
 	return (
-		<svg viewBox="0 0 25 25" fill="none" className="w-full h-full">
+		<svg aria-hidden="true" viewBox="0 0 25 25" fill="none" className="w-full h-full">
 			<path
 				d="M12 25C7.58173 25 4 21.4183 4 17C4 12.5817 7.58173 9 12 9V25Z"
 				fill="white"

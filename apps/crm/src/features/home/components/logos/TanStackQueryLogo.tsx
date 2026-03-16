@@ -1,6 +1,6 @@
 export function TanStackQueryLogo() {
 	return (
-		<svg viewBox="0 0 410 404" fill="none" className="w-full h-full">
+		<svg aria-hidden="true" viewBox="0 0 410 404" fill="none" className="w-full h-full">
 			<path
 				fillRule="evenodd"
 				clipRule="evenodd"

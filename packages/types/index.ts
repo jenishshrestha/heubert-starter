@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Common types
 export type ID = string;
-export type Timestamp = Date | string;
+export type Timestamp = string; // ISO 8601 format for API transport
 
 // User types
 export const UserSchema = z.object({
@@ -16,6 +16,9 @@ export const UserSchema = z.object({
 });
 
 export type User = z.infer<typeof UserSchema>;
+
+export const UserRoles = ["admin", "user"] as const;
+export type UserRole = (typeof UserRoles)[number];
 
 // API Response types
 export const ApiResponseSchema = z.object({
@@ -51,5 +54,5 @@ export type PaginatedResponse<T> = {
   };
 };
 
-// Export all schemas
-export * from "zod";
+// Re-export only the z constructor for schema creation convenience
+export { z } from "zod";

@@ -1,11 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Run type check
 pnpm type-check
-
-# Run linter
 pnpm lint
-
-# Run tests
-pnpm test --run
+pnpm test -- --run

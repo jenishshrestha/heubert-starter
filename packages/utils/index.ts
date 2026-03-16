@@ -13,6 +13,9 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function formatDate(date: Date | string, locale = "en-US"): string {
   const d = typeof date === "string" ? new Date(date) : date;
+  if (Number.isNaN(d.getTime())) {
+    return "Invalid date";
+  }
   return new Intl.DateTimeFormat(locale, {
     year: "numeric",
     month: "long",
@@ -21,25 +24,32 @@ export function formatDate(date: Date | string, locale = "en-US"): string {
 }
 
 /**
- * Debounce function
+ * Debounce function with cancel support
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number,
-): (...args: Parameters<T>) => void {
+): ((...args: Parameters<T>) => void) & { cancel: () => void } {
   let timeout: ReturnType<typeof setTimeout> | null = null;
 
-  return function executedFunction(...args: Parameters<T>) {
-    const later = () => {
-      timeout = null;
-      func(...args);
-    };
-
+  const debounced = (...args: Parameters<T>) => {
     if (timeout) {
       clearTimeout(timeout);
     }
-    timeout = setTimeout(later, wait);
+    timeout = setTimeout(() => {
+      timeout = null;
+      func(...args);
+    }, wait);
   };
+
+  debounced.cancel = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  return debounced;
 }
 
 /**
@@ -50,15 +60,10 @@ export function sleep(ms: number): Promise<void> {
 }
 
 /**
- * Generate random ID
+ * Generate cryptographically random ID
  */
-export function generateId(length = 16): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < length; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
+export function generateId(): string {
+  return crypto.randomUUID();
 }
 
 /**
@@ -69,8 +74,8 @@ export function capitalize(str: string): string {
 }
 
 /**
- * Truncate text
+ * Truncate text with configurable suffix
  */
-export function truncate(str: string, length: number): string {
-  return str.length > length ? `${str.slice(0, length)}...` : str;
+export function truncate(str: string, length: number, suffix = "..."): string {
+  return str.length > length ? `${str.slice(0, length)}${suffix}` : str;
 }

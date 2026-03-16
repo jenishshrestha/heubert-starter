@@ -1,6 +1,12 @@
 import { config } from "@heubert/config";
 import axios, { type AxiosError, type AxiosResponse } from "axios";
 
+export interface ApiError {
+  status: number;
+  message: string;
+  code?: string;
+}
+
 /**
  * Axios client configured for the NestJS backend
  */
@@ -14,13 +20,12 @@ export const apiClient = axios.create({
 
 // Request interceptor for adding auth tokens
 apiClient.interceptors.request.use(
-  (config) => {
-    // Add auth token from localStorage if it exists
+  (requestConfig) => {
     const token = localStorage.getItem("auth_token");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      requestConfig.headers.Authorization = `Bearer ${token}`;
     }
-    return config;
+    return requestConfig;
   },
   (error) => Promise.reject(error),
 );
@@ -28,15 +33,21 @@ apiClient.interceptors.request.use(
 // Response interceptor for handling errors
 apiClient.interceptors.response.use(
   (response: AxiosResponse) => response,
-  (error: AxiosError) => {
-    // Handle common errors
-    if (error.response?.status === 401) {
-      // Redirect to login or refresh token
+  (error: AxiosError<{ message?: string; code?: string }>) => {
+    const status = error.response?.status ?? 0;
+    const apiError: ApiError = {
+      status,
+      message: error.response?.data?.message || error.message || "An unexpected error occurred",
+      code: error.response?.data?.code,
+    };
+
+    if (status === 401) {
       localStorage.removeItem("auth_token");
-      window.location.href = "/auth/login";
+      // Dispatch event so the app can handle navigation without hard reload
+      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
     }
 
-    return Promise.reject(error);
+    return Promise.reject(apiError);
   },
 );
 
@@ -45,11 +56,13 @@ export async function apiRequest<T>(
   method: "get" | "post" | "put" | "patch" | "delete",
   url: string,
   data?: unknown,
+  params?: Record<string, unknown>,
 ): Promise<T> {
   const response = await apiClient.request<T>({
     method,
     url,
     data,
+    params,
   });
   return response.data;
 }
