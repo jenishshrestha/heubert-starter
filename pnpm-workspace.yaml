@@ -1,6 +1,7 @@
 packages:
   - apps/*
   - packages/*
-  - tooling/*
+ignoredBuiltDependencies:
+  - esbuild
 onlyBuiltDependencies:
   - '@swc/core'
