@@ -5,10 +5,19 @@ import {
 import type { Meta, StoryObj } from "@storybook/react";
 import { Bold, Italic, Underline } from "lucide-react";
 
+type ToggleGroupArgs = {
+  type: "single" | "multiple";
+  variant?: "default" | "outline";
+  size?: "default" | "sm" | "lg";
+  disabled?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+};
+
 /**
  * A set of two-state buttons that can be toggled on or off.
  */
-const meta = {
+const meta: Meta<ToggleGroupArgs> = {
   title: "ui/ToggleGroup",
   component: ToggleGroup,
   tags: ["autodocs"],
@@ -40,7 +49,7 @@ const meta = {
   parameters: {
     layout: "centered",
   },
-} satisfies Meta<typeof ToggleGroup>;
+};
 
 export default meta;
 

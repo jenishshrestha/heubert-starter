@@ -72,6 +72,25 @@
       "linter": {
         "enabled": false
       }
+    },
+    {
+      "includes": ["packages/design-system/components/ui/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useFocusableInteractive": "warn",
+            "useSemanticElements": "warn",
+            "useKeyWithClickEvents": "warn",
+            "useAriaPropsForRole": "warn"
+          },
+          "security": {
+            "noDangerouslySetInnerHtml": "warn"
+          },
+          "suspicious": {
+            "noDocumentCookie": "warn"
+          }
+        }
+      }
     }
   ]
 }

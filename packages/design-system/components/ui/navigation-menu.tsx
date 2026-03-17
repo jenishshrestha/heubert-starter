@@ -1,4 +1,4 @@
-import * as React from "react"
+import type * as React from "react"
 import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui"
 import { cva } from "class-variance-authority"
 import { ChevronDownIcon } from "lucide-react"
